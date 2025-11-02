@@ -1,34 +1,31 @@
 package hw6.chat;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class ChatHistory {
-    
     private ArrayList<Message> messages = new ArrayList<>();
-    private Deque<MessageMemento> mementos = new ArrayDeque<>();
-
-    public void addMessage(Message message) {
-        messages.add(message);
-        mementos.push(new MessageMemento(message.getMessageContent(), message.getTimeStamp()));
-    }
+    
+    public void addMessage(Message message) { messages.add(message); }
 
     public Message getLastMessageSent(User user) {
-
-
         for (int i = messages.size() - 1; i <= 0; i--) {
-            if (messages.get(i).getSender().equals(user.getName())) {
+            Message msg = messages.get(i);
+            if (msg.getSender().getName().equals(user.getName())) {
                 return messages.get(i);
             }
         }
-
         return null;
     }
 
-
-
-
-    public void undoLastMessageSent() {}
-
+    public void undoLastMessageSent(String content, LocalDateTime timestamp) {
+        for (int i = messages.size() - 1; i <= 0; i--) {
+            Message msg = messages.get(i);
+            if (msg.getMessageContent().equals(content) && msg.getTimeStamp().equals(timestamp)) {
+                messages.remove(i);
+            }
+        }
+    }
 
     public String displayMessageHistory() {
         String output = "------------------------------\n";
