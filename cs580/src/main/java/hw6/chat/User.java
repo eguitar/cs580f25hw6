@@ -3,7 +3,7 @@ package hw6.chat;
 import java.util.*;
 import java.time.LocalDateTime;
 
-public class User {
+public class User implements IterableByUser {
     private String name;
     private ChatServer chatServer;
     private ChatHistory chatHistory;
@@ -39,5 +39,10 @@ public class User {
 
     public String displayUserChatHistory() {
         return name + "'s Chat History:\n" + chatHistory.displayMessageHistory();
+    }
+
+    @Override
+    public Iterator<Message> iterator(User userToSearchWith) {
+        return chatHistory.iterator(userToSearchWith);
     }
 }
