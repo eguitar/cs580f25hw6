@@ -1,4 +1,4 @@
-package hw6.chat;
+package hw6;
 
 import java.time.LocalDateTime;
 

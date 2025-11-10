@@ -1,4 +1,4 @@
-package hw6.chat;
+package hw6;
 
 import java.util.*;
 
@@ -16,8 +16,18 @@ public class ChatServer {
         blockedUsers.remove(user.getName());
     }
 
+    public boolean validateUser(String userName) {
+        return users.containsKey(userName);
+    }
+
     public void sendMessage(Message message) {
+        if (!users.containsKey(message.getSender().getName())) {
+            return;
+        }
         for (User recipient : message.getRecipients()) {
+            if (!users.containsKey(recipient.getName())) {
+                continue;
+            }
             Set<String> blocked = blockedUsers.getOrDefault(recipient.getName(), Collections.emptySet());
             if (!blocked.contains(message.getSender().getName())) {
                 recipient.receiveMessage(message);

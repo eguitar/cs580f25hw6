@@ -1,26 +1,35 @@
-package hw6.chat;
+package hw6;
 
 import java.util.*;
 import java.time.LocalDateTime;
 
 public class User implements IterableByUser {
     private String name;
-    private ChatServer chatServer;
     private ChatHistory chatHistory;
     private MessageMemento memento;
     
-    public User(String name, ChatServer chatServer) {
+    public User(String name) {
         this.name = name;
-        this.chatServer = chatServer;
         this.chatHistory = new ChatHistory();
         this.memento = null;
     }
 
     public String getName() { return name; }
 
-    public void sendMessage(ArrayList<User> recipients, String content) {
+    public void sendMessage(ArrayList<User> recipients, String content, ChatServer chatServer) {
+        if (chatServer == null) return;
+        if (!chatServer.validateUser(this.name)) return;
+
         LocalDateTime timestamp = LocalDateTime.now();
-        Message msg = new Message(this, recipients, timestamp, content);
+        ArrayList<User> validRecipients = new ArrayList<>();
+        for (User user : recipients) {
+            if (chatServer.validateUser(user.getName())) {
+                validRecipients.add(user);
+            }
+        }
+        if (validRecipients.isEmpty()) return;
+
+        Message msg = new Message(this, validRecipients, timestamp, content);
         chatServer.sendMessage(msg);
         chatHistory.addMessage(msg);
         memento = new MessageMemento(content, timestamp);
@@ -38,8 +47,13 @@ public class User implements IterableByUser {
     }
 
     public String displayUserChatHistory() {
-        return name + "'s Chat History:\n" + chatHistory.displayMessageHistory();
+        return name + "'s Chat History:\n" + 
+                "#############################################\n" + 
+                chatHistory.displayMessageHistory() +
+                "#############################################\n";
     }
+
+    public ChatHistory getChatHistory() { return chatHistory; }
 
     @Override
     public Iterator<Message> iterator(User userToSearchWith) {

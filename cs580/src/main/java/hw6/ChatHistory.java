@@ -1,4 +1,4 @@
-package hw6.chat;
+package hw6;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -18,6 +18,8 @@ public class ChatHistory implements IterableByUser {
         return null;
     }
 
+    public int getNumMessages() { return messages.size(); }
+
     public void undoLastMessageSent(String content, LocalDateTime timestamp) {
         for (int i = messages.size() - 1; i >= 0; i--) {
             Message msg = messages.get(i);
@@ -34,6 +36,13 @@ public class ChatHistory implements IterableByUser {
             output = output + "------------------------------\n";
         }
         return output;
+    }
+
+    public boolean containsMessage(String msgContent) {
+        for (Message msg : messages) {
+            if (msg.getMessageContent().equals(msgContent)) { return true; }
+        }
+        return false;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package hw6.chat;
+package hw6;
 
 import java.util.ArrayList;
 import java.time.LocalDateTime;
@@ -24,6 +24,6 @@ public class Message {
 
     @Override
     public String toString() {
-        return "Timestamp: " + timestamp + "\nSender: " + sender + "\nMessage: \n" + content;
+        return "Timestamp: " + timestamp + "\nSender: " + sender.getName() + "\nMessage: \n" + content + "\n";
     }
 }
